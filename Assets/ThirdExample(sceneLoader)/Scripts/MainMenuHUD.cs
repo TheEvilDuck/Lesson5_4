@@ -1,9 +1,18 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class MainMenuHUD : MonoBehaviour
 {
     [SerializeField] private Button _levelSelectionMenuButton;
+
+    private ISceneLoadMediator _sceneLoader;
+
+    [Inject]
+    private void Construct(ISceneLoadMediator sceneLoader)
+    {
+        _sceneLoader = sceneLoader;
+    }
 
     private void OnEnable()
         => _levelSelectionMenuButton.onClick.AddListener(OnLevelSelectionMenuClick);
@@ -11,8 +20,5 @@ public class MainMenuHUD : MonoBehaviour
     private void OnDisable()
         => _levelSelectionMenuButton.onClick.RemoveListener(OnLevelSelectionMenuClick);
 
-    private void OnLevelSelectionMenuClick()
-    {
-        //загрузить сцену выбора уровня
-    }
+    private void OnLevelSelectionMenuClick() => _sceneLoader.GoToLevelSelectionMenu();
 }

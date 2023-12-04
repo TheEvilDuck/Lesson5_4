@@ -1,18 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+using Zenject;
 
-public class MobileInput : MonoBehaviour
+public class MobileInput : IInput, ITickable
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public event Action<Vector3> ClickDown;
+    public event Action<Vector3> ClickUp;
+    public event Action<Vector3> Drag;
 
-    // Update is called once per frame
-    void Update()
+    public void Tick()
     {
-        
+        if(Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    ClickDown?.Invoke(touch.position);
+                    break;
+
+                case TouchPhase.Moved:
+                    Drag?.Invoke(touch.position);
+                    break;
+
+                case TouchPhase.Ended:
+                    ClickUp?.Invoke(touch.position);
+                    break;
+            }
+        }
     }
 }
