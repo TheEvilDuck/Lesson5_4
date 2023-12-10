@@ -3,17 +3,19 @@ using Zenject;
 
 public class Bootstrap : MonoBehaviour
 {
-    [SerializeField] private EnemySpawner _spawner;
+    private EnemySpawner _spawner;
 
     private PauseHandler _pauseHandler;
 
     [Inject]
-    private void Construct(PauseHandler pauseHandler)
+    private void Construct(PauseHandler pauseHandler, EnemySpawner enemySpawner)
     {
         _pauseHandler = pauseHandler;
+        _spawner = enemySpawner;
+
     }
 
-    private void Awake()
+    private void Start() 
     {
         _spawner.StartWork();
     }
